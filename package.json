@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/malachispencer/myMDb/issues"
   },
-  "homepage": "https://github.com/malachispencer/myMDb#readme"
+  "homepage": "https://github.com/malachispencer/myMDb#readme",
+  "devDependencies": {
+    "jest": "^26.6.3",
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  }
 }
