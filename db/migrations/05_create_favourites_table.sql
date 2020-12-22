@@ -1,0 +1,1 @@
+CREATE TABLE favourites (user_id INTEGER REFERENCES users (user_id), movie_id BIGINT);

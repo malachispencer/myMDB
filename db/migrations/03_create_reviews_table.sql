@@ -1,0 +1,1 @@
+CREATE TABLE reviews (review_id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users (user_id), movie_id BIGINT, title VARCHAR(60), body VARCHAR(1000), date DATE DEFAULT CURRENT_DATE, time TIME);

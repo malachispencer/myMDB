@@ -1,0 +1,1 @@
+CREATE TABLE ratings (rating_id SERIAL PRIMARY KEY, user_id INTEGER REFERENCES users (user_id), movie_id BIGINT, score INTEGER);
