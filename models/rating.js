@@ -1,8 +1,11 @@
-const pool = require("../db/dbConnection");
+const pool = require('../db/dbConnection');
 
 class Rating {
-  constructor() {
-
+  constructor(rating_id, user_id, movie_id, score) {
+    this.rating_id = rating_id;
+    this.user_id = user_id;
+    this.movie_id = movie_id;
+    this.score = score;
   }
 
   static async create(user_id, movie_id, score) {    
@@ -12,10 +15,17 @@ class Rating {
 
     const values = [user_id, movie_id, score];
 
-    await pool
+    const dbResponse = await pool
       .query(sql, values)
       .then(res => { return res.rows[0] })
       .catch(err => console.log(err))
+
+    return new Rating(
+      dbResponse.rating_id,
+      dbResponse.user_id,
+      dbResponse.movie_id,
+      dbResponse.score
+    );
   }
 }
 

@@ -19,9 +19,9 @@ describe('Rating', () => {
         .query(sql, values)
         .then(res => { return res.rows[0] })
       
-      expect(ratingFromDB.user_id).toBe(null)
-      expect(ratingFromDB.movie_id).toBe('1')
-      expect(ratingFromDB.score).toBe(10)
+      expect(ratingFromDB.user_id).toBeNull();
+      expect(ratingFromDB.movie_id).toBe('1');
+      expect(ratingFromDB.score).toBe(10);
     });
 
     test('returns a Rating instance', async () => {
