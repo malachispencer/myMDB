@@ -4,9 +4,16 @@ const closeTestDB = require('../setup/closeTestDB');
 const Rating = require('../../models/rating');
 
 describe('Rating', () => {
+  let userID;
 
   beforeEach(async () => {
     await cleanTestDB();
+
+    userID = await pool.query(
+      `INSERT INTO users 
+      (username, email, password) VALUES ($1, $2, $3)
+      RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
+    ).then(res => { return res.rows[0].user_id });
   });
 
   afterAll(async () => {
@@ -41,12 +48,6 @@ describe('Rating', () => {
 
   describe('.allByUser', () => {
     test('retrieves all the ratings made by a given user', async () => {
-      const userID = await pool.query(
-        `INSERT INTO users 
-        (username, email, password) VALUES ($1, $2, $3)
-        RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
-      ).then(res => { return res.rows[0].user_id });
-
       await Rating.create(userID, 1, 9);
       await Rating.create(userID, 2, 6);
       await Rating.create(userID, 3, 3);
@@ -62,12 +63,6 @@ describe('Rating', () => {
 
   describe('.allForMovie', () => {
     test('retrieves all the ratings of a given movie', async () => {
-      const userID = await pool.query(
-        `INSERT INTO users 
-        (username, email, password) VALUES ($1, $2, $3)
-        RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
-      ).then(res => { return res.rows[0].user_id });
-
       await Rating.create(userID, 1, 7);
       await Rating.create(null, 1, 3);
 
@@ -76,6 +71,19 @@ describe('Rating', () => {
       expect(movieRatings.length).toBe(2);
       expect(movieRatings[0].score).toBe(3);
       expect(movieRatings[1].score).toBe(7);
+    });
+  });
+
+  describe('.update', () => {
+    test(`changes the user's rating of a particular movie`, async () => {
+      const rating = await Rating.create(userID, 1, 7);
+      const ratingID = rating.ratingID;
+
+      const updatedRating = await Rating.update(userID, 1, 7);
+
+      expect(rating.ratingID).toEqual(updatedRating.ratingID);
+      expect(rating.userID).toEqual(updatedRating.userID);
+      expect(updatedRating.score).toBe(7);
     });
   });
 });

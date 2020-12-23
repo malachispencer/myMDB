@@ -65,6 +65,29 @@ class Rating {
       );
     });
   }
+
+  static async update(userID, movieID, newScore) {
+    const sql = `
+      UPDATE ratings 
+      SET score = $1 
+      WHERE user_id = $2 AND movie_id = $3 
+      RETURNING rating_id, user_id, movie_id, score
+    `;
+    
+    const values = [newScore, userID, movieID];
+
+    const newRating = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    return new Rating(
+      newRating.rating_id,
+      newRating.user_id,
+      newRating.movie_id,
+      newRating.score
+    );
+  }
 }
 
 module.exports = Rating;
