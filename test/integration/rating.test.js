@@ -12,7 +12,7 @@ describe('Rating', () => {
     userID = await pool.query(
       `INSERT INTO users 
       (username, email, password) VALUES ($1, $2, $3)
-      RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
+      RETURNING user_id`, ['malachi', 'm.spencer@makers.com', '2020']
     ).then(res => { return res.rows[0].user_id });
   });
 
