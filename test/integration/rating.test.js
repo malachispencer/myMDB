@@ -5,12 +5,12 @@ const Rating = require('../../models/rating');
 
 describe('Rating', () => {
 
-  beforeEach(() => {
-    cleanTestDB();
+  beforeEach(async () => {
+    await cleanTestDB();
   });
 
-  afterAll(() => {
-    closeTestDB();
+  afterAll(async () => {
+    await closeTestDB();
   });
 
   describe('.create', () => {
@@ -23,7 +23,7 @@ describe('Rating', () => {
       const ratingFromDB = await pool
         .query(sql, values)
         .then(res => { return res.rows[0] })
-      
+        
       expect(ratingFromDB.user_id).toBeNull();
       expect(ratingFromDB.movie_id).toBe('1');
       expect(ratingFromDB.score).toBe(10);
@@ -32,9 +32,9 @@ describe('Rating', () => {
     test('returns a Rating instance', async () => {
       const rating = await Rating.create(null, 1, 10);
 
-      expect(rating.rating_id).toBeDefined();
-      expect(rating.user_id).toBeNull();
-      expect(rating.movie_id).toBe('1');
+      expect(rating.ratingID).toBeDefined();
+      expect(rating.userID).toBeNull();
+      expect(rating.movieID).toBe('1');
       expect(rating.score).toBe(10);
     });
   });
@@ -57,6 +57,25 @@ describe('Rating', () => {
       expect(userRatings[0].score).toBe(3);
       expect(userRatings[1].score).toBe(6);
       expect(userRatings[2].score).toBe(9);
+    });
+  });
+
+  describe('.allForMovie', () => {
+    test('retrieves all the ratings of a given movie', async () => {
+      const userID = await pool.query(
+        `INSERT INTO users 
+        (username, email, password) VALUES ($1, $2, $3)
+        RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
+      ).then(res => { return res.rows[0].user_id });
+
+      await Rating.create(userID, 1, 7);
+      await Rating.create(null, 1, 3);
+
+      const movieRatings = await Rating.allForMovie(1);
+
+      expect(movieRatings.length).toBe(2);
+      expect(movieRatings[0].score).toBe(3);
+      expect(movieRatings[1].score).toBe(7);
     });
   });
 });
