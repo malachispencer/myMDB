@@ -86,4 +86,18 @@ describe('Rating', () => {
       expect(updatedRating.score).toBe(7);
     });
   });
+
+  describe('.delete', () => {
+    test(`deletes the user's rating from the database`, async () => {
+      const rating = await Rating.create(userID, 1, 7);
+
+      await Rating.delete(userID, 1);
+
+      const dbResponse = await pool
+        .query('SELECT * FROM ratings WHERE rating_id = $1', [rating.ratingID])
+        .then(res => { return res.rows[0]; })
+
+      expect(dbResponse).toBeUndefined();
+    });
+  });
 });

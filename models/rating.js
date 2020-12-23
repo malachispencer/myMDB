@@ -73,7 +73,7 @@ class Rating {
       WHERE user_id = $2 AND movie_id = $3 
       RETURNING rating_id, user_id, movie_id, score
     `;
-    
+
     const values = [newScore, userID, movieID];
 
     const newRating = await pool
@@ -87,6 +87,16 @@ class Rating {
       newRating.movie_id,
       newRating.score
     );
+  }
+
+  static async delete(userID, movieID) {
+    const sql = `DELETE FROM ratings WHERE user_id = $1 AND movie_id = $2`;
+    const values = [userID, movieID];
+
+    await pool
+      .query(sql, values)
+      .then(res => { return res })
+      .catch(err => console.log(err))
   }
 }
 
