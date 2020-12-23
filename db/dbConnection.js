@@ -12,7 +12,8 @@ const pool = new Pool({
   user: process.env.USER,
   host: 'localhost',
   port: 5432,
-  database: dbName
+  database: dbName,
+  max: 1
 });
 
 module.exports = pool;
