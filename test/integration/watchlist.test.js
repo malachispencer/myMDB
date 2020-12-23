@@ -36,6 +36,18 @@ describe('Watchlist', () => {
     });
   });
 
+  describe('.retrieve', () => {
+    it(`gets and returns a user's entire watchlist`, () => {
+      await Watchlist.add(userID, 1);
+      await Watchlist.add(userID, 2);
+      await Watchlist.add(null, 1);
+
+      const watchlist = await Watchlist.retrieve(userID);
+
+      expect(watchlist.length).toEqual(2);
+    });
+  });
+
   describe('.delete', () => {
     it('deletes a watchlist entry from the database', async () => {
       await Watchlist.add(userID, 1);
