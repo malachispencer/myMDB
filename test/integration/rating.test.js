@@ -23,5 +23,14 @@ describe('Rating', () => {
       expect(ratingFromDB.movie_id).toBe('1')
       expect(ratingFromDB.score).toBe(10)
     });
+
+    test('returns a Rating instance', async () => {
+      const rating = await Rating.create(null, 1, 10);
+
+      expect(rating.rating_id).toBeDefined();
+      expect(rating.user_id).toBeNull();
+      expect(rating.movie_id).toBe('1');
+      expect(rating.score).toBe(10);
+    });
   });
 });
