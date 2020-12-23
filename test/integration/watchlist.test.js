@@ -1,0 +1,38 @@
+const pool = require('../../db/dbConnection');
+const cleanTestDB = require('../setup/cleanTestDB');
+const closeTestDB = require('../setup/closeTestDB');
+const Watchlist = require('../../models/watchlist');
+
+describe('Watchlist', () => {
+  let userID;
+
+  beforeEach(async () => {
+    await cleanTestDB();
+
+    userID = await pool.query(
+      `INSERT INTO users 
+      (username, email, password) VALUES ($1, $2, $3)
+      RETURNING user_id`, ['malachi', 'm.spencer@makers.com', '2020']
+    ).then(res => { return res.rows[0].user_id });
+  });
+
+  afterAll(async () => {
+    await closeTestDB();
+  });
+
+  describe('.add', () => {
+    test('adds a watchlist item to the database', async () => {
+      await Watchlist.add(userID, 1);
+
+      const sql = `SELECT * FROM watchlist WHERE user_id = $1 AND movie_id = $2`;
+      const values = [userID, 1];
+
+      const watchlistItemFromDB = await pool
+        .query(sql, values)
+        .then(res => { return res.rows[0]; })
+            
+      expect(watchlistItemFromDB.user_id).toEqual(userID);
+      expect(watchlistItemFromDB.movie_id).toBe('1');
+    });
+  });
+});
