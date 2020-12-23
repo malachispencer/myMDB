@@ -1,6 +1,6 @@
 const pool = require('../../db/dbConnection');
 
-async function cleanTestDB() {
+module.exports = async function cleanTestDB() {
   const sql = `TRUNCATE users, ratings, reviews, watchlist, favourites;`
 
   await pool.query(sql, (err, res) => {
@@ -8,4 +8,4 @@ async function cleanTestDB() {
   });
 }
 
-cleanTestDB();
+// cleanTestDB();

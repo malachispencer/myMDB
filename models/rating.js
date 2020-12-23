@@ -27,6 +27,25 @@ class Rating {
       dbResponse.score
     );
   }
+
+  static async allByUser(user_id) {
+    const sql = `SELECT * FROM ratings WHERE user_id = $1 ORDER BY rating_id DESC`;
+    const values = [user_id];
+
+    const userRatings = await pool
+      .query(sql, values)
+      .then(res => { return res.rows })
+      .catch(err => console.log(err))
+
+    return userRatings.map(rating => {
+      return new Rating(
+        rating.rating_id,
+        rating.user_id,
+        rating.movie_id,
+        rating.score
+      );
+    });
+  }
 }
 
 module.exports = Rating;

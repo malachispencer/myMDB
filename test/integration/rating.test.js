@@ -1,8 +1,13 @@
 const pool = require('../../db/dbConnection');
+const cleanTestDB = require('../setup/cleanTestDB');
 const closeTestDB = require('../setup/closeTestDB');
 const Rating = require('../../models/rating');
 
 describe('Rating', () => {
+
+  beforeEach(() => {
+    cleanTestDB();
+  });
 
   afterAll(() => {
     closeTestDB();
@@ -36,11 +41,17 @@ describe('Rating', () => {
 
   describe('.allByUser', () => {
     test('retrieves all the ratings made by a given user', async () => {
-      Rating.create(null, 1, 9);
-      Rating.create(null, 2, 6);
-      Rating.create(null, 3, 3);
+      const userID = await pool.query(
+        `INSERT INTO users 
+        (username, email, password) VALUES ($1, $2, $3)
+        RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
+      ).then(res => { return res.rows[0].user_id });
 
-      const userRatings = await Rating.allByUser(null);
+      await Rating.create(userID, 1, 9);
+      await Rating.create(userID, 2, 6);
+      await Rating.create(userID, 3, 3);
+
+      const userRatings = await Rating.allByUser(userID);
 
       expect(userRatings.length).toBe(3);
       expect(userRatings[0].score).toBe(3);

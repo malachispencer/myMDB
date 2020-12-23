@@ -1,4 +1,4 @@
 module.exports = {
-  verbose: true,
-  setupFiles: ['./setup/cleanTestDB']
+  verbose: true
+  // setupFiles: ['./setup/cleanTestDB']
 };
