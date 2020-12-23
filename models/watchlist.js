@@ -17,6 +17,16 @@ class Watchlist {
 
     return dbResponse;
   }
+
+  static async delete(userID, movieID) {
+    const sql = `DELETE FROM watchlist WHERE user_id = $1 AND movie_id = $2`;
+    const values = [userID, movieID];
+
+    await pool
+      .query(sql, values)
+      .then(res => { return res })
+      .catch(err => console.log(err))
+  }
 }
 
 module.exports = Watchlist;

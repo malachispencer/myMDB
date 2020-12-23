@@ -21,7 +21,7 @@ describe('Watchlist', () => {
   });
 
   describe('.add', () => {
-    test('adds a watchlist item to the database', async () => {
+    it('adds a watchlist entry to the database', async () => {
       await Watchlist.add(userID, 1);
 
       const sql = `SELECT * FROM watchlist WHERE user_id = $1 AND movie_id = $2`;
@@ -33,6 +33,22 @@ describe('Watchlist', () => {
             
       expect(watchlistItemFromDB.user_id).toEqual(userID);
       expect(watchlistItemFromDB.movie_id).toBe('1');
+    });
+  });
+
+  describe('.delete', () => {
+    it('deletes a watchlist entry from the database', async () => {
+      await Watchlist.add(userID, 1);
+      await Watchlist.delete(userID, 1);
+
+      const sql = `SELECT * FROM watchlist WHERE user_id = $1 AND movie_id = $2`;
+      const values = [userID, 1];
+
+      const dbResponse = await pool
+        .query(sql, values)
+        .then(res => { return res.rows[0]; })
+
+       expect(dbResponse).toBeUndefined();
     });
   });
 });
