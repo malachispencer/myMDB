@@ -21,7 +21,7 @@ describe('Watchlist', () => {
   });
 
   describe('.add', () => {
-    it('adds a watchlist entry to the database', async () => {
+    test('adds a watchlist entry to the database', async () => {
       await Watchlist.add(userID, 1);
 
       const sql = `SELECT * FROM watchlist WHERE user_id = $1 AND movie_id = $2`;
@@ -37,7 +37,7 @@ describe('Watchlist', () => {
   });
 
   describe('.retrieve', () => {
-    it(`gets and returns a user's entire watchlist`, async () => {
+    test(`gets and returns a user's entire watchlist`, async () => {
       await Watchlist.add(userID, 1);
       await Watchlist.add(userID, 2);
       await Watchlist.add(null, 1);
@@ -52,7 +52,7 @@ describe('Watchlist', () => {
   });
 
   describe('.delete', () => {
-    it('deletes a watchlist entry from the database', async () => {
+    test('deletes a watchlist entry from the database', async () => {
       await Watchlist.add(userID, 1);
       await Watchlist.delete(userID, 1);
 
