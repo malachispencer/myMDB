@@ -191,13 +191,15 @@ describe('Review', () => {
         '14:21'
       );
 
-      await Review.delete(review.reviewID);
+      const returnValue = await Review.delete(review.reviewID);
 
       const dbResponse = await pool
         .query(`SELECT * FROM reviews WHERE review_id = $1`, [review.reviewID])
         .then(res => { return res.rows[0]; })
 
       expect(dbResponse).toBeUndefined();
+      expect(returnValue).toBeInstanceOf(Object);
+      expect(returnValue.status).toBe('deleted');
     });
   });
 });

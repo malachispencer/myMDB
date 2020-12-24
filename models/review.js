@@ -146,6 +146,16 @@ class Review {
     );
   }
 
+  static async delete(reviewID) {
+    const sql = `DELETE FROM reviews WHERE review_id = $1`;
+    const values = [reviewID];
+
+    return await pool
+      .query(sql, values)
+      .then(res => { return { reviewID: reviewID, status: 'deleted' }; })
+      .catch(err => console.log(err))
+  }
+
   static async #getReviewerName(userID) {
     const sql = `SELECT username FROM users WHERE user_id = $1`;
     const values = [userID];
