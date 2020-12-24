@@ -37,14 +37,17 @@ describe('Watchlist', () => {
   });
 
   describe('.retrieve', () => {
-    it(`gets and returns a user's entire watchlist`, () => {
+    it(`gets and returns a user's entire watchlist`, async () => {
       await Watchlist.add(userID, 1);
       await Watchlist.add(userID, 2);
       await Watchlist.add(null, 1);
 
       const watchlist = await Watchlist.retrieve(userID);
 
-      expect(watchlist.length).toEqual(2);
+      expect(watchlist.userID).toEqual(userID);
+      expect(watchlist.movieIDs).toBeInstanceOf(Array);
+      expect(watchlist.movieIDs).toContain('1');
+      expect(watchlist.movieIDs).toContain('2');
     });
   });
 
