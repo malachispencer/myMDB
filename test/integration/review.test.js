@@ -158,4 +158,26 @@ describe('Review', () => {
       expect(movieReviews[0].body).toBe('Ending was a bit disappointing');
     });
   });
+
+  describe('.update', () => {
+    test('updates the title and body of a review', async () => {
+      const review = Review.create(
+        userID,
+        1,
+        'Loved it',
+        'One of the best movies of all time',
+        '14:21'
+      );
+
+      const updatedReview = Review.update(
+        review.reviewID,
+        'Loved the film',
+        'One of my favourite movies'
+      );
+
+      expect(review.reviewID).toEqual(updatedReview.reviewID);
+      expect(updatedReview.title).toBe('Loved the film');
+      expect(updatedReview.body).toBe('One of my favourite movies');
+    });
+  });
 });
