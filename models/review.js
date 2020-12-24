@@ -78,27 +78,40 @@ class Review {
     });
   }
 
-  // static async allForMovie(movieID) {
-  //   const sql = `
-  //     SELECT review_id, 
-  //     user_id, movie_id, title, body,
-  //     to_char(time, 'HH24:MI') as time, 
-  //     to_char(date, 'DD/MM/YYYY') as date
-  //     FROM reviews 
-  //     WHERE movie_id = $1 
-  //     ORDER BY review_id DESC
-  //   `;
+  static async allForMovie(movieID) {
+    const sql = `
+      SELECT r.review_id, 
+      r.user_id, u.username, 
+      r.movie_id, r.title, r.body,
+      to_char(r.time, 'HH24:MI') as time, 
+      to_char(r.date, 'DD/MM/YYYY') as date
+      FROM reviews AS r
+      INNER JOIN users AS u
+      ON r.user_id = u.user_id
+      WHERE movie_id = $1 
+      ORDER BY review_id DESC
+    `;
 
-  //   const values = [movieID];
+    const values = [movieID];
 
-  //   const movieReviews = await pool
-  //     .query(sql, values)
-  //     .then(res => { return res.rows; })
-  //     .catch(err => console.log(err))
+    const movieReviews = await pool
+      .query(sql, values)
+      .then(res => { return res.rows; })
+      .catch(err => console.log(err))
 
-
-  //   console.log(movieReviews)
-  // }
+    return movieReviews.map(review => {
+      return new Review(
+        review.review_id,
+        review.user_id,
+        review.username,
+        review.movie_id,
+        review.title,
+        review.body,
+        review.time,
+        review.date
+      )
+    });
+  }
 
   static async #getReviewerName(userID) {
     const sql = `SELECT username FROM users WHERE user_id = $1`;

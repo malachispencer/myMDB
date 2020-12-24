@@ -117,7 +117,7 @@ describe('Review', () => {
   });
 
   describe('.allForMovie', () => {
-    test('returns all the reviews for a given movie', async () => {
+    test('returns all the reviews for a given movie in descending order', async () => {
       const aiUserID = await pool.query(
         `INSERT INTO users 
         (username, email, password) VALUES ($1, $2, $3)
@@ -153,7 +153,9 @@ describe('Review', () => {
       expect(movieReviews).toBeInstanceOf(Array);
       expect(movieReviews).toHaveLength(2);
       expect(movieReviews[0].time).toBe('12:39');
+      expect(movieReviews[1].time).toBe('12:38');
       expect(movieReviews[1].title).toBe('Loved it');
+      expect(movieReviews[0].body).toBe('Ending was a bit disappointing');
     });
   });
 });
