@@ -113,6 +113,39 @@ class Review {
     });
   }
 
+  static async update(reviewID, newTitle, newBody) {
+    const sql = `
+      UPDATE reviews 
+      SET title = $1, body = $2 
+      WHERE review_id = $3
+      RETURNING review_id,
+      user_id, movie_id,
+      title, body,
+      to_char(time, 'HH24:MI') as time, 
+      to_char(date, 'DD/MM/YYYY') as date
+    `;
+
+    const values = [newTitle, newBody, reviewID];
+
+    const updatedReview = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    const reviewerName = await this.#getReviewerName(updatedReview.user_id);
+
+    return new Review(
+      updatedReview.review_id,
+      updatedReview.user_id,
+      reviewerName,
+      updatedReview.movie_id,
+      updatedReview.title,
+      updatedReview.body,
+      updatedReview.time,
+      updatedReview.date
+    );
+  }
+
   static async #getReviewerName(userID) {
     const sql = `SELECT username FROM users WHERE user_id = $1`;
     const values = [userID];

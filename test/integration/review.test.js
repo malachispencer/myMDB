@@ -161,7 +161,7 @@ describe('Review', () => {
 
   describe('.update', () => {
     test('updates the title and body of a review', async () => {
-      const review = Review.create(
+      const review = await Review.create(
         userID,
         1,
         'Loved it',
@@ -169,7 +169,7 @@ describe('Review', () => {
         '14:21'
       );
 
-      const updatedReview = Review.update(
+      const updatedReview = await Review.update(
         review.reviewID,
         'Loved the film',
         'One of my favourite movies'
