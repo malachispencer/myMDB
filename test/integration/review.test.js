@@ -77,7 +77,7 @@ describe('Review', () => {
         userID, 
         2, 
         'Hated it', 
-        'One of the best worst of all time', 
+        'One of the worst of all time', 
         '11:06'
       );
 
@@ -103,7 +103,7 @@ describe('Review', () => {
         userID, 
         2, 
         'Hated it', 
-        'One of the best worst of all time', 
+        'One of the worst of all time', 
         '11:06'
       );
 
@@ -113,6 +113,47 @@ describe('Review', () => {
       expect(userReviews[1].movieID).toBe('1');
       expect(userReviews[0].time).toBe('11:06');
       expect(userReviews[1].time).toBe('11:05');
+    });
+  });
+
+  describe('.allForMovie', () => {
+    test('returns all the reviews for a given movie', async () => {
+      const aiUserID = await pool.query(
+        `INSERT INTO users 
+        (username, email, password) VALUES ($1, $2, $3)
+        RETURNING user_id`, ['ai', 'ai@makers.com', '2020']
+      ).then(res => { return res.rows[0].user_id });
+
+      await Review.create(
+        userID, 
+        1, 
+        'Loved it', 
+        'One of the best movies of all time', 
+        '12:38'
+      );
+
+      await Review.create(
+        aiUserID,
+        1,
+        'It was okay',
+        'Ending was a bit disappointing',
+        '12:39'
+      );
+
+      await Review.create(
+        userID, 
+        2,
+        'Hated it', 
+        'One of the best worst of all time', 
+        '11:06'
+      );
+
+      const movieReviews = await Review.allForMovie(1);
+        
+      expect(movieReviews).toBeInstanceOf(Array);
+      expect(movieReviews).toHaveLength(2);
+      expect(movieReviews[0].time).toBe('12:39');
+      expect(movieReviews[1].title).toBe('Loved it');
     });
   });
 });

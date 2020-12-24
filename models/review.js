@@ -78,6 +78,28 @@ class Review {
     });
   }
 
+  // static async allForMovie(movieID) {
+  //   const sql = `
+  //     SELECT review_id, 
+  //     user_id, movie_id, title, body,
+  //     to_char(time, 'HH24:MI') as time, 
+  //     to_char(date, 'DD/MM/YYYY') as date
+  //     FROM reviews 
+  //     WHERE movie_id = $1 
+  //     ORDER BY review_id DESC
+  //   `;
+
+  //   const values = [movieID];
+
+  //   const movieReviews = await pool
+  //     .query(sql, values)
+  //     .then(res => { return res.rows; })
+  //     .catch(err => console.log(err))
+
+
+  //   console.log(movieReviews)
+  // }
+
   static async #getReviewerName(userID) {
     const sql = `SELECT username FROM users WHERE user_id = $1`;
     const values = [userID];
