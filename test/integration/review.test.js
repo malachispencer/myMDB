@@ -180,4 +180,24 @@ describe('Review', () => {
       expect(updatedReview.body).toBe('One of my favourite movies');
     });
   });
+
+  describe('.delete', () => {
+    test(`removes the user's review from the database`, async () => {
+      const review = await Review.create(
+        userID,
+        1,
+        'Loved it',
+        'One of the best movies of all time',
+        '14:21'
+      );
+
+      await Review.delete(review.reviewID);
+
+      const dbResponse = await pool
+        .query(`SELECT * FROM reviews WHERE review_id = $1`, [review.reviewID])
+        .then(res => { return res.rows[0]; })
+
+      expect(dbResponse).toBeUndefined();
+    });
+  });
 });
