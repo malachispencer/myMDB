@@ -54,6 +54,7 @@ describe('Rating', () => {
 
       const userRatings = await Rating.allByUser(userID);
 
+      expect(userRatings).toBeInstanceOf(Array);
       expect(userRatings.length).toBe(3);
       expect(userRatings[0].score).toBe(3);
       expect(userRatings[1].score).toBe(6);
