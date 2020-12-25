@@ -4,6 +4,8 @@
   "description": "Site where you can search movies, review them, rate them and add them to your watchlist or favourites",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
+    "dev": "NODE_ENV=development nodemon app",
     "test": "jest --runInBand --config ./test/jest.config.js"
   },
   "repository": {
@@ -22,7 +24,12 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "joi": "^17.3.0",
+    "jsonwebtoken": "^8.5.1",
+    "morgan": "^1.10.0",
     "pg": "^8.5.1"
   }
 }
