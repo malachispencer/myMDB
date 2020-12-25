@@ -4,6 +4,8 @@
   "description": "Site where you can search movies, review them, rate them and add them to your watchlist or favourites",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
+    "dev": "nodemon app",
     "test": "jest --runInBand --config ./test/jest.config.js"
   },
   "repository": {
