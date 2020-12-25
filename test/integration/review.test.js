@@ -59,7 +59,6 @@ describe('Review', () => {
       expect(review.title).toBe('Loved it');
       expect(review.body).toBe('One of the best movies of all time');
       expect(review.time).toBe('10:40');
-      expect(review.date).toBe('24/12/2020');
     });
   });
 
@@ -87,7 +86,6 @@ describe('Review', () => {
       expect(userReviews.length).toBe(2);
       expect(userReviews[0].username).toBe('malachi');
       expect(userReviews[1].username).toBe('malachi');
-      expect(userReviews[0].date).toBe('24/12/2020');
     });
 
     test('returns the reviews in descending order', async () => {
