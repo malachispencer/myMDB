@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const { signToken } = require('../utils/jwt');
 
 module.exports = {
   signUp: async (req, res, next) => {
@@ -10,5 +11,7 @@ module.exports = {
     }
 
     const newUser = await User.create(username, email, password);
+    const token = signToken(newUser.userID);
+    res.status(200).json({ token });
   }
 }
