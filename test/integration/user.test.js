@@ -41,4 +41,20 @@ describe('User', () => {
       expect(user.googleID).toBeNull();
     });
   });
+
+  describe('.findByEmail', () => {
+    test('returns user if found in the database', async () => {
+      const foundUser = await User.findByEmail('m.spencer@makers.com');
+
+      expect(foundUser).toBeInstanceOf(Object);
+      expect(foundUser.userID).toEqual(user.userID);
+      expect(foundUser.username).toBe('malachi');
+    });
+
+    test('returns null if user not found', async () => {
+      const foundUser = await User.findByEmail('nulluser@makers.com');
+
+      expect(foundUser).toBeNull();
+    })
+  });
 });

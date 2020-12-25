@@ -34,6 +34,25 @@ class User {
       dbResponse.google_id
     );
   }
+
+  static async findByEmail(email) {
+    const sql = `SELECT * FROM users WHERE email = $1`;
+    const values = [email];
+
+    const dbResponse = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    if (!dbResponse) { return null; }
+
+    return new User(
+      dbResponse.user_id,
+      dbResponse.username,
+      dbResponse.email,
+      dbResponse.google_id
+    );
+  }
 }
 
 module.exports = User;
