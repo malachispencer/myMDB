@@ -2,8 +2,7 @@ const User = require('../models/user');
 
 module.exports = {
   signUp: async (req, res, next) => {
-    const { username, password } = req.validated.body;
-    const email = req.validated.body.email.toLowerCase();
+    const { username, password, email } = req.validated.body;
     const foundUser = await User.findByEmail(email);
 
     if (foundUser) { 

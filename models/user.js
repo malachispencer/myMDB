@@ -11,6 +11,7 @@ class User {
 
   static async create(username, email, password, googleID = null) {
     const encryptedPassword = await hashPassword(password);
+    email = email.toLowerCase();
 
     const sql = `
       INSERT INTO users 
@@ -37,7 +38,7 @@ class User {
 
   static async findByEmail(email) {
     const sql = `SELECT * FROM users WHERE email = $1`;
-    const values = [email];
+    const values = [email.toLowerCase()];
 
     const dbResponse = await pool
       .query(sql, values)
