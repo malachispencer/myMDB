@@ -10,6 +10,6 @@ module.exports = {
       issuer: 'myMDb',
       subject: userID,
       expiresIn: '7d'
-    }, process.env.MYMDB_TOKEN_SECRET);
+    }, process.env.MYMDB_JWT_SECRET);
   }
 }
