@@ -73,4 +73,18 @@ describe('User', () => {
       expect(foundUser).toBeNull();
     });
   });
+
+  describe('#isValidPassword', () => {
+    test(`returns true if user's password credential is correct`, async () => {
+      const result = await user.isValidPassword('2020');
+
+      expect(result).toBe(true);
+    });
+
+    test(`returns false if user's password credential is incorrect`, async () => {
+      const result = await user.isValidPassword('wrongPassword');
+
+      expect(result).toBe(false);
+    });
+  });
 });
