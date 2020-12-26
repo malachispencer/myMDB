@@ -1,5 +1,8 @@
+const { signToken } = require('../utils/jwt');
+
 module.exports = {
   signIn: async (req, res, next) => {
-    console.log('POST request made to /auth');
+    const token = signToken(req.user.userID);
+    res.status(200).json({ token });
   }
 }

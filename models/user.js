@@ -1,5 +1,5 @@
+const bcrypt = require('bcrypt');
 const pool = require('../db/dbConnection');
-const { hashPassword } = require('../utils/password');
 
 class User {
   constructor(userID, username, email, googleID) {
@@ -10,7 +10,7 @@ class User {
   }
 
   static async create(username, email, password, googleID = null) {
-    const encryptedPassword = await hashPassword(password);
+    const encryptedPassword = await this.#hashPassword(password);
     email = email.toLowerCase();
 
     const sql = `
@@ -72,6 +72,24 @@ class User {
       dbResponse.email,
       dbResponse.google_id
     );
+  }
+
+  static async #hashPassword(password) {
+    const salt = await bcrypt.genSalt(10);
+    const hashed = await bcrypt.hash(password, salt);
+    return hashed;
+  }
+
+  async isValidPassword(passwordCredential) {
+    const sql = `SELECT password FROM users WHERE email = $1`;
+    const values = [this.email];
+
+    const dbPassword = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0].password; })
+      .catch(err => console.log(err))
+
+    return await bcrypt.compare(passwordCredential, dbPassword);
   }
 }
 
