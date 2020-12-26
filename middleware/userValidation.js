@@ -14,7 +14,6 @@ module.exports = {
       next();
     }
   },
-
   userSchema: Joi.object().keys({
     username: Joi.string().alphanum().min(4).max(20).required(),
     email: Joi.string().email().required(),
@@ -23,6 +22,6 @@ module.exports = {
       .valid(Joi.ref('password'))
       .required()
       .label('Password confirmation')
-      .messages({ 'any.only': '{{#label}} does not match' })
+      .messages({ 'any.only': '{{#label}} does not match password' })
   })
-}
+};
