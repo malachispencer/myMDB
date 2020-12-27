@@ -38,7 +38,7 @@ describe('User', () => {
       expect(user.userID).toBeDefined();
       expect(user.username).toBe('malachi');
       expect(user.email).toBe('m.spencer@makers.com');
-      expect(user.googleID).toBeNull();
+      expect(user.facebookID).toBeNull();
     });
   });
 
@@ -85,6 +85,24 @@ describe('User', () => {
       const result = await user.isValidPassword('wrongPassword');
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe('.findByFacebookID', () => {
+    test('returns user who signed up with facebook if found', async () => {
+      const fbUser = await User.create('Facebook User', 'facebook@makers.com', '2020', 123456789);
+      const foundUser = await User.findByFacebookID(fbUser.facebookID);
+
+      expect(fbUser.userID).toEqual(foundUser.userID);
+      expect(fbUser.facebookID).toEqual(foundUser.facebookID);
+      expect(fbUser.email).toEqual(foundUser.email);
+    });
+
+    test('returns null if no facebook user with that facebookID found', async () => {
+      const fbUser = await User.create('Facebook User', 'facebook@makers.com', '2020', 123456789);
+      const foundUser = await User.findByFacebookID(12345)
+
+      expect(foundUser).toBeNull();
     });
   });
 });
