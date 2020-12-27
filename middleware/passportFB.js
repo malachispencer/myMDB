@@ -4,6 +4,7 @@ require('dotenv').config({
 
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
+const User = require('../models/user');
 
 passport.use(new FacebookStrategy({
   clientID: process.env.MYMDB_FACEBOOK_CLIENT_ID,
@@ -12,8 +13,16 @@ passport.use(new FacebookStrategy({
   profileFields: ['id', 'displayName', 'email']
 }, async (accessToken, refreshToken, profile, done) => {
   try {
-    console.log('PROFILE', profile._json)
-    console.log('ACCESS TOKEN', accessToken)
+    const { id, name, email } = profile._json;
+    const existingUser = await User.findByFacebookID(id);
+
+    if (existingUser) {
+      return done(null, existingUser);
+    }
+
+    const newUser = await User.fbCreate(name, email, id);
+    done(null, newUser);
+
   } catch (err) {
     done(err, false);
   }
