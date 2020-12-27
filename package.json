@@ -1,7 +1,7 @@
 {
   "name": "mymdb",
   "version": "1.0.0",
-  "description": "Site where you can search movies, review them, rate them and add them to your watchlist or favourites",
+  "description": "Backend API for myMDb",
   "main": "app.js",
   "scripts": {
     "start": "node app",
