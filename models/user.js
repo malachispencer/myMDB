@@ -9,19 +9,45 @@ class User {
     this.facebookID = facebookID;
   }
 
-  static async create(username, email, password, facebookID = null) {
+  static async create(username, email, password) {
     const encryptedPassword = await this.#hashPassword(password);
     email = email.toLowerCase();
 
     const sql = `
       INSERT INTO users 
-      (username, email, password, facebook_id) 
-      VALUES ($1, $2, $3, $4) 
+      (username, email, password) 
+      VALUES ($1, $2, $3) 
       RETURNING user_id, username, 
       email, facebook_id;
       `;
 
-    const values = [username, email, encryptedPassword, facebookID];
+    const values = [username, email, encryptedPassword];
+
+    const dbResponse = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    return new User(
+      dbResponse.user_id,
+      dbResponse.username,
+      dbResponse.email,
+      dbResponse.facebook_id
+    );
+  }
+
+  static async fbCreate(username, email, facebookID) {
+    email = email.toLowerCase();
+
+    const sql = `
+      INSERT INTO users
+      (username, email, facebook_id)
+      VALUES ($1, $2, $3)
+      RETURNING user_id, username,
+      email, facebook_id
+    `;
+
+    const values = [username, email, facebookID];
 
     const dbResponse = await pool
       .query(sql, values)
