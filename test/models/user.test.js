@@ -1,6 +1,5 @@
 const pool = require('../../db/dbConnection');
-const cleanTestDB = require('../setup/cleanTestDB');
-const closeTestDB = require('../setup/closeTestDB');
+const testDB = require('../testDB');
 const User = require('../../models/user');
 
 describe('User', () => {
@@ -8,13 +7,13 @@ describe('User', () => {
   let fbUser;
 
   beforeEach(async () => {
-    await cleanTestDB();
+    await testDB.clean();
     user = await User.create('malachi', 'm.spencer@makers.com', '2020');
     fbUser = await User.fbCreate('Facebook User', 'facebook@makers.com', 123456);
   });
 
   afterAll(async () => {
-    await closeTestDB();
+    await testDB.close();
   });
 
   describe('.create', () => {

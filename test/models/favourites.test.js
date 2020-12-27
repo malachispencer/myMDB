@@ -1,13 +1,12 @@
 const pool = require('../../db/dbConnection');
-const cleanTestDB = require('../setup/cleanTestDB');
-const closeTestDB = require('../setup/closeTestDB');
+const testDB = require('../testDB');
 const Favourites = require('../../models/favourites');
 
 describe('Favourites', () => {
   let userID;
 
   beforeEach(async () => {
-    await cleanTestDB();
+    await testDB.clean();
 
     userID = await pool.query(
       `INSERT INTO users 
@@ -17,7 +16,7 @@ describe('Favourites', () => {
   });
 
   afterAll(async () => {
-    await closeTestDB();
+    await testDB.close();
   });
 
   describe('.add', () => {
