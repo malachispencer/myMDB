@@ -2,26 +2,26 @@ const bcrypt = require('bcrypt');
 const pool = require('../db/dbConnection');
 
 class User {
-  constructor(userID, username, email, googleID) {
+  constructor(userID, username, email, facebookID) {
     this.userID = userID;
     this.username = username;
     this.email = email;
-    this.googleID = googleID;
+    this.facebookID = facebookID;
   }
 
-  static async create(username, email, password, googleID = null) {
+  static async create(username, email, password) {
     const encryptedPassword = await this.#hashPassword(password);
     email = email.toLowerCase();
 
     const sql = `
       INSERT INTO users 
-      (username, email, password, google_id) 
-      VALUES ($1, $2, $3, $4) 
+      (username, email, password) 
+      VALUES ($1, $2, $3) 
       RETURNING user_id, username, 
-      email, google_id;
+      email, facebook_id;
       `;
 
-    const values = [username, email, encryptedPassword, googleID];
+    const values = [username, email, encryptedPassword];
 
     const dbResponse = await pool
       .query(sql, values)
@@ -32,7 +32,33 @@ class User {
       dbResponse.user_id,
       dbResponse.username,
       dbResponse.email,
-      dbResponse.google_id
+      dbResponse.facebook_id
+    );
+  }
+
+  static async fbCreate(username, email, facebookID) {
+    email = email.toLowerCase();
+
+    const sql = `
+      INSERT INTO users
+      (username, email, facebook_id)
+      VALUES ($1, $2, $3)
+      RETURNING user_id, username,
+      email, facebook_id
+    `;
+
+    const values = [username, email, facebookID];
+
+    const dbResponse = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    return new User(
+      dbResponse.user_id,
+      dbResponse.username,
+      dbResponse.email,
+      dbResponse.facebook_id
     );
   }
 
@@ -51,7 +77,7 @@ class User {
       dbResponse.user_id,
       dbResponse.username,
       dbResponse.email,
-      dbResponse.google_id
+      dbResponse.facebook_id
     );
   }
 
@@ -70,7 +96,26 @@ class User {
       dbResponse.user_id,
       dbResponse.username,
       dbResponse.email,
-      dbResponse.google_id
+      dbResponse.facebook_id
+    );
+  }
+
+  static async findByFacebookID(facebookID) { 
+    const sql = `SELECT * FROM users WHERE facebook_id = $1`;
+    const values = [facebookID];
+
+    const dbResponse = await pool
+      .query(sql, values)
+      .then(res => { return res.rows[0]; })
+      .catch(err => console.log(err))
+
+    if (!dbResponse) { return null; }
+
+    return new User(
+      dbResponse.user_id,
+      dbResponse.username,
+      dbResponse.email,
+      dbResponse.facebook_id
     );
   }
 

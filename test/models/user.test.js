@@ -5,10 +5,12 @@ const User = require('../../models/user');
 
 describe('User', () => {
   let user;
+  let fbUser;
 
   beforeEach(async () => {
     await cleanTestDB();
     user = await User.create('malachi', 'm.spencer@makers.com', '2020');
+    fbUser = await User.fbCreate('Facebook User', 'facebook@makers.com', 123456);
   });
 
   afterAll(async () => {
@@ -38,7 +40,7 @@ describe('User', () => {
       expect(user.userID).toBeDefined();
       expect(user.username).toBe('malachi');
       expect(user.email).toBe('m.spencer@makers.com');
-      expect(user.googleID).toBeNull();
+      expect(user.facebookID).toBeNull();
     });
   });
 
@@ -85,6 +87,40 @@ describe('User', () => {
       const result = await user.isValidPassword('wrongPassword');
 
       expect(result).toBe(false);
+    });
+  });
+
+  describe('.fbCreate', () => {
+    test('adds a user to db who signs up with their facebook account', async () => {
+      const dbResponse = await pool
+        .query(`SELECT * FROM users WHERE facebook_id = $1`, [fbUser.facebookID])
+        .then(res => { return res.rows[0]; })
+      
+      expect(dbResponse.facebook_id).toEqual('123456');
+      expect(dbResponse.username).toBe('Facebook User');
+      expect(dbResponse.email).toBe('facebook@makers.com');
+    });
+
+    test('returns a user instance', async () => {
+      expect(fbUser).toBeInstanceOf(Object);
+      expect(fbUser.userID).toBeDefined();
+      expect(fbUser.email).toBe('facebook@makers.com');
+    });
+  });
+
+  describe('.findByFacebookID', () => {
+    test('returns user who signed up with facebook if found', async () => {
+      const foundUser = await User.findByFacebookID(fbUser.facebookID);
+
+      expect(fbUser.userID).toEqual(foundUser.userID);
+      expect(fbUser.facebookID).toEqual(foundUser.facebookID);
+      expect(fbUser.email).toEqual(foundUser.email);
+    });
+
+    test('returns null if no facebook user with that facebookID found', async () => {
+      const foundUser = await User.findByFacebookID(0);
+
+      expect(foundUser).toBeNull();
     });
   });
 });
