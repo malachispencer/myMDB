@@ -23,26 +23,15 @@ class Movie {
 
     const movieIDs = await this.#getMovieIDs(url, totalPages);
     const movieDetails = await this.#getMovieDetails(movieIDs);
+    const movies = this.#parseMovieDetails(movieDetails);
+    return movies;
+  }
 
-    return movieDetails.map(movie => {
-      let poster;
-
-      if (movie.poster_path) {
-        poster = `https://image.tmdb.org/t/p/w185${movie.poster_path}`
-      } else {
-        poster = null;
-      }
-
-      return new Movie(
-        movie.id,
-        movie.title,
-        movie.overview,
-        movie.genres,
-        movie.release_date,
-        poster,
-        movie.imdb_id
-      );
-    });    
+  static async retrieveList(list) {
+    const movieIDs = list.movieIDs;
+    const movieDetails = await this.#getMovieDetails(movieIDs);
+    const movies = this.#parseMovieDetails(movieDetails);
+    return movies;
   }
 
   static #buildSearchURL(query) {
@@ -92,6 +81,26 @@ class Movie {
     
     return movieDetails;
   }
-}
 
-//Movie.search('lord of the rings').then(res => console.log(res)).catch(err => console.log(err));
+  static #parseMovieDetails(movieDetails) {
+    return movieDetails.map(movie => {
+      let poster;
+
+      if (movie.poster_path) {
+        poster = `https://image.tmdb.org/t/p/w185${movie.poster_path}`
+      } else {
+        poster = null;
+      }
+
+      return new Movie(
+        movie.id,
+        movie.title,
+        movie.overview,
+        movie.genres,
+        movie.release_date,
+        poster,
+        movie.imdb_id
+      );
+    });
+  }
+}
