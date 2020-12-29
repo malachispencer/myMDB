@@ -1,6 +1,6 @@
 # myMDb Back End API
 
-Back end API of myMDb, a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. Server built in Node and Express. PostgreSQL database. Authentication with Passport Local, Passport Facebook and Passport JWT. Authorization with JSON Web Tokens. Movie data sourced from The Movie Database (TMDb) API.
+Back end API of myMDb, a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. Server built in Node and Express. PostgreSQL database. Authentication with Passport Local, Passport Facebook and Passport JWT. Authorization with JSON Web Tokens. Movie data sourced from The Movie Database (TMDb) API. Models tested with Jest.
 
 ## Entity Relationship Diagram
 
