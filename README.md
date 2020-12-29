@@ -1,6 +1,10 @@
-# myMDb Back End API
+# myMDb
 
-Back end API of myMDb, a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. Server built in Node and Express. PostgreSQL database. Authentication with Passport Local, Passport Facebook and Passport JWT. Authorization with JSON Web Tokens. Movie data sourced from The Movie Database (TMDb) API. Models tested with Jest.
+Back end API of myMDb, a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. 
+
+## Technologies Used
+
+Server built in Node and Express. PostgreSQL database. Authentication with Passport Local, Passport Facebook and Passport JWT. Authorization with JSON Web Tokens. Movie data sourced from The Movie Database (TMDb) API. Models tested with Jest.
 
 ## Entity Relationship Diagram
 
@@ -10,7 +14,7 @@ Back end API of myMDb, a site where a user can search for movies, rate a movie, 
 
 ![myMDb-Class-Diagram](https://user-images.githubusercontent.com/71923215/102818106-e639cd00-43c8-11eb-8cae-963da9acfb3b.png)
 
-## User Stories
+## User Stories
 
 ```
 As a user,
@@ -38,8 +42,8 @@ I'd like to be able to see myMDB reviews of that movie.
 
 ```
 As a user,
-so I can gain extra privileges on myMDB,
-I'd like to be able to sign up and log in to myMDB.
+so I can gain extra privileges on myMDb,
+I'd like to be able to sign up and log in to myMDb.
 ```
 
 ```
