@@ -75,11 +75,11 @@ class Movie {
       movieIDs.map(async movieID => {
         return await axios({ method: 'get', url: `${baseURL}${movieID}${apiKey}${lang}` })
           .then(res => { return res.data } )
-          .catch(err => console.log(err))
+          .catch(err => { console.log('GET MOVIE DETAILS ERROR', err.request.path) })
       })
     );
     
-    return movieDetails;
+    return movieDetails.filter(movie => movie);
   }
 
   static #parseMovieDetails(movieDetails) {
@@ -104,3 +104,5 @@ class Movie {
     });
   }
 }
+
+module.exports = Movie;
