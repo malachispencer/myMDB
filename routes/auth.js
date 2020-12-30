@@ -4,10 +4,10 @@ const passport = require('passport');
 const passportLocal = require('../middleware/passportLocal');
 const passportFB = require('../middleware/passportFB');
 const AuthController = require('../controllers/auth');
-const { validateUser, signInSchema } = require('../middleware/userValidation');
+const { validateBody, signInSchema } = require('../middleware/joi');
 
 router.route('/')
-  .post(validateUser(signInSchema), passport.authenticate('local', { session: false }), AuthController.localAuth);
+  .post(validateBody(signInSchema), passport.authenticate('local', { session: false }), AuthController.localAuth);
 
 router.route('/facebook')
   .get(passport.authenticate('facebook', { session: false, scope: ['email'] }))
