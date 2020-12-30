@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 module.exports = {
-  validateUser: (schema) => {
+  validateBody: (schema) => {
     return (req, res, next) => {
       const result = schema.validate(req.body);
 
@@ -14,6 +14,7 @@ module.exports = {
       next();
     }
   },
+
   signUpSchema: Joi.object().keys({
     username: Joi.string().alphanum().min(4).max(20).required(),
     email: Joi.string().email().required(),
@@ -24,8 +25,14 @@ module.exports = {
       .label('Password confirmation')
       .messages({ 'any.only': '{{#label}} does not match password' })
   }),
+
   signInSchema: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().min(4).required()
+  }),
+  
+  ratingSchema: Joi.object().keys({
+    movieID: Joi.number().required(),
+    score: Joi.number().integer().min(1).max(10).required()
   })
 };
