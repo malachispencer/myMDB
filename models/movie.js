@@ -85,11 +85,13 @@ class Movie {
   static #parseMovieDetails(movieDetails) {
     return movieDetails.map(movie => {
       let poster;
+      let urlTitle;
 
       if (movie.poster_path) {
-        poster = `https://image.tmdb.org/t/p/w185${movie.poster_path}`
+        poster = `https://image.tmdb.org/t/p/w185${movie.poster_path}`;
       } else {
-        poster = null;
+        urlTitle = movie.title.replace(/\s/g, '%20');
+        poster = `https://dummyimage.com/185x280/fff/000.jpg&text=${urlTitle}`;
       }
 
       return new Movie(
