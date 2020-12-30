@@ -1,4 +1,4 @@
-# myMDb Back End API
+# myMDb
 
 Back end API of myMDb, a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. 
 
