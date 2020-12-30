@@ -34,6 +34,28 @@ class Movie {
     return movies;
   }
 
+  static async findByID(movieID) {
+    const baseURL = 'https://api.themoviedb.org/3/movie/';
+    const apiKey = `?api_key=${process.env.TMDB_KEY}`;
+    const lang = '&language=en-US';
+
+    const movieData = await axios({ method: 'get', url: `${baseURL}${movieID}${apiKey}${lang}` })
+      .then(res => { return res.data; })
+      .catch(err => console.log('MOVIE.FIND_BY_ID ERROR', err))
+
+    if (!movieData) { return null; }
+
+    return new Movie(
+      movieData.id,
+      movieData.title,
+      movieData.overview,
+      movieData.genres,
+      movieData.release_date,
+      this.#buildPoster(movieData),
+      movieData.imdb_id
+    );
+  }
+
   static #buildSearchURL(query) {
     const baseURL = 'https://api.themoviedb.org/3/search/movie';
     const apiKey = `?api_key=${process.env.TMDB_KEY}`;
@@ -75,7 +97,7 @@ class Movie {
       movieIDs.map(async movieID => {
         return await axios({ method: 'get', url: `${baseURL}${movieID}${apiKey}${lang}` })
           .then(res => { return res.data } )
-          .catch(err => { console.log('GET MOVIE DETAILS ERROR', err.request.path) })
+          .catch(err => { console.log('MOVIE.GET_MOVIE_DETAILS ERROR', err.request.path) })
       })
     );
     
@@ -84,26 +106,30 @@ class Movie {
 
   static #parseMovieDetails(movieDetails) {
     return movieDetails.map(movie => {
-      let poster;
-      let urlTitle;
-
-      if (movie.poster_path) {
-        poster = `https://image.tmdb.org/t/p/w185${movie.poster_path}`;
-      } else {
-        urlTitle = movie.title.replace(/\s/g, '%20');
-        poster = `https://dummyimage.com/185x280/fff/000.jpg&text=${urlTitle}`;
-      }
-
       return new Movie(
         movie.id,
         movie.title,
         movie.overview,
         movie.genres,
         movie.release_date,
-        poster,
+        this.#buildPoster(movie),
         movie.imdb_id
       );
     });
+  }
+
+  static #buildPoster(movieData) {
+    let poster;
+    let urlTitle;
+
+    if (movieData.poster_path) {
+      poster = `https://image.tmdb.org/t/p/w185${movieData.poster_path}`;
+    } else {
+      urlTitle = movieData.title.replace(/\s/g, '%20');
+      poster = `https://dummyimage.com/185x280/fff/000.jpg&text=${urlTitle}`;
+    }
+
+    return poster;
   }
 }
 
