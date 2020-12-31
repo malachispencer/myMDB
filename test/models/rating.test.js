@@ -91,7 +91,7 @@ describe('Rating', () => {
     test(`deletes the user's rating from the database`, async () => {
       const rating = await Rating.create(userID, 1, 7);
 
-      await Rating.delete(userID, 1);
+      await Rating.delete(rating.ratingID);
 
       const dbResponse = await pool
         .query('SELECT * FROM ratings WHERE rating_id = $1', [rating.ratingID])

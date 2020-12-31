@@ -89,14 +89,14 @@ class Rating {
     );
   }
 
-  static async delete(userID, movieID) {
-    const sql = `DELETE FROM ratings WHERE user_id = $1 AND movie_id = $2`;
-    const values = [userID, movieID];
+  static async delete(ratingID) {
+    const sql = `DELETE FROM ratings WHERE rating_id = $1`;
+    const values = [ratingID];
 
-    await pool
+    const dbResponse = await pool
       .query(sql, values)
       .then(res => { return res })
-      .catch(err => console.log(err))
+      .catch(err => console.log('RATING.DELETE ERROR', err))
   }
 }
 
