@@ -79,7 +79,7 @@ describe('Rating', () => {
       const rating = await Rating.create(userID, 1, 7);
       const ratingID = rating.ratingID;
 
-      const updatedRating = await Rating.update(userID, 1, 7);
+      const updatedRating = await Rating.update(ratingID, 7);
 
       expect(rating.ratingID).toEqual(updatedRating.ratingID);
       expect(rating.userID).toEqual(updatedRating.userID);
@@ -91,7 +91,7 @@ describe('Rating', () => {
     test(`deletes the user's rating from the database`, async () => {
       const rating = await Rating.create(userID, 1, 7);
 
-      await Rating.delete(userID, 1);
+      await Rating.delete(rating.ratingID);
 
       const dbResponse = await pool
         .query('SELECT * FROM ratings WHERE rating_id = $1', [rating.ratingID])

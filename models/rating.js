@@ -66,20 +66,20 @@ class Rating {
     });
   }
 
-  static async update(userID, movieID, newScore) {
+  static async update(ratingID, newScore) {
     const sql = `
       UPDATE ratings 
       SET score = $1 
-      WHERE user_id = $2 AND movie_id = $3 
+      WHERE rating_id = $2
       RETURNING rating_id, user_id, movie_id, score
     `;
 
-    const values = [newScore, userID, movieID];
+    const values = [newScore, ratingID];
 
     const newRating = await pool
       .query(sql, values)
       .then(res => { return res.rows[0]; })
-      .catch(err => console.log(err))
+      .catch(err => console.log('RATING.UPDATE ERROR', err))
 
     return new Rating(
       newRating.rating_id,
@@ -89,14 +89,14 @@ class Rating {
     );
   }
 
-  static async delete(userID, movieID) {
-    const sql = `DELETE FROM ratings WHERE user_id = $1 AND movie_id = $2`;
-    const values = [userID, movieID];
+  static async delete(ratingID) {
+    const sql = `DELETE FROM ratings WHERE rating_id = $1`;
+    const values = [ratingID];
 
-    await pool
+    const dbResponse = await pool
       .query(sql, values)
       .then(res => { return res })
-      .catch(err => console.log(err))
+      .catch(err => console.log('RATING.DELETE ERROR', err))
   }
 }
 
