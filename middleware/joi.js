@@ -34,5 +34,10 @@ module.exports = {
   ratingSchema: Joi.object().keys({
     movieID: Joi.number().required(),
     score: Joi.number().integer().min(1).max(10).required()
+  }),
+
+  updateRatingSchema: Joi.object().keys({
+    ratingID: Joi.number().required(),
+    newScore: Joi.number().integer().min(1).max(10).required()
   })
 };
