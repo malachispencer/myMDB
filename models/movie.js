@@ -39,7 +39,7 @@ class Movie {
     const apiKey = `?api_key=${process.env.TMDB_KEY}`;
     const lang = '&language=en-US';
 
-    const movieData = await axios({ method: 'get', url: `${baseURL}${movieID}${apiKey}${lang}` })
+    const movieData = await axios.get({ url: `${baseURL}${movieID}${apiKey}${lang}` })
       .then(res => { return res.data; })
       .catch(err => console.log('MOVIE.FIND_BY_ID ERROR', err))
 
@@ -65,7 +65,7 @@ class Movie {
   }
 
   static async #pagesInSearch(url) {
-    return await axios({ method: 'get', url: url })
+    return await axios.get(url)
       .then(res => { return res.data.total_pages; })
       .catch(err => console.log(err))
   }
@@ -76,7 +76,7 @@ class Movie {
     for (let i = 1; i <= totalPages; i++) {
       let page = `&page=${i}`;
 
-      await axios({ method: 'get', url: `${url}${page}` })
+      await axios.get(`${url}${page}`)
         .then(res => { 
           res.data.results.forEach(movie => {
             movieIDs.push(movie.id);
@@ -95,7 +95,7 @@ class Movie {
 
     const movieDetails = await Promise.all(
       movieIDs.map(async movieID => {
-        return await axios({ method: 'get', url: `${baseURL}${movieID}${apiKey}${lang}` })
+        return await axios.get(`${baseURL}${movieID}${apiKey}${lang}`)
           .then(res => { return res.data } )
           .catch(err => { console.log('MOVIE.GET_MOVIE_DETAILS ERROR', err.request.path) })
       })
