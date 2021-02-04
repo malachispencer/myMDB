@@ -1,7 +1,9 @@
 const testDB = require('../testDB');
 const Movie = require('../../models/movie');
 const tmdbResponse = require('../../__fixtures__/tmdbResponse');
+const movieList = require('../../__fixtures__/movieList');
 const mockAxios = require('axios');
+const { retrieveList } = require('../../models/movie');
 
 jest.mock('axios');
 
@@ -39,6 +41,19 @@ describe('Movie', () => {
       const result = await Movie.search('matrix');
       
       expect(result).toBeNull();
+    });
+  });
+
+  describe('retrieveList', () => {
+    test('takes a list of movieIDs and returns the movies', async () => {
+      mockAxios.get.mockResolvedValueOnce(tmdbResponse.movieOneDetails);
+      mockAxios.get.mockResolvedValueOnce(tmdbResponse.movieTwoDetails);
+
+      const movies = await Movie.retrieveList(movieList.listObject);
+
+      expect(movies.length).toBe(2);
+      expect(movies[0].title).toBe(tmdbResponse.movieOneDetails.data.title);
+      expect(movies[1].title).toBe(tmdbResponse.movieTwoDetails.data.title);
     });
   });
 });
