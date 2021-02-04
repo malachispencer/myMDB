@@ -19,6 +19,10 @@ module.exports = {
       ]
     }
 	},
+
+	noMovieFound: {
+		data: undefined
+	},
 	
   movieOneDetails: {
     data: {
