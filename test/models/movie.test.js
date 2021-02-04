@@ -32,5 +32,13 @@ describe('Movie', () => {
       expect(results[1].plot).toBe(tmdbResponse.movieTwoDetails.data.overview);
       expect(results[1].genres).toEqual(tmdbResponse.movieTwoDetails.data.genres);
     });
+
+    test('returns null if no results are found from the API', async () => {
+      mockAxios.get.mockResolvedValueOnce(tmdbResponse.zeroTotalPages);
+
+      const result = await Movie.search('matrix');
+      
+      expect(result).toBeNull();
+    });
   });
 });
