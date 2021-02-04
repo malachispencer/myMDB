@@ -1,4 +1,10 @@
 module.exports = {
+	zeroTotalPages: {
+		data: {
+			total_pages: 0
+		}
+	},
+	
   totalPages: {
     data: {
       total_pages: 1
