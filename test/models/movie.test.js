@@ -3,7 +3,6 @@ const Movie = require('../../models/movie');
 const tmdbResponse = require('../../__fixtures__/tmdbResponse');
 const movieList = require('../../__fixtures__/movieList');
 const mockAxios = require('axios');
-const { retrieveList } = require('../../models/movie');
 
 jest.mock('axios');
 
@@ -54,6 +53,28 @@ describe('Movie', () => {
       expect(movies.length).toBe(2);
       expect(movies[0].title).toBe(tmdbResponse.movieOneDetails.data.title);
       expect(movies[1].title).toBe(tmdbResponse.movieTwoDetails.data.title);
+    });
+  });
+
+  describe('findByID', () => {
+    test('given a TMDb ID, returns the movie', async () => {
+      mockAxios.get.mockResolvedValueOnce(tmdbResponse.movieOneDetails);
+
+      const theMatrixTMDbID = 603;
+      const result = await Movie.findByID(theMatrixTMDbID);
+
+      expect(result).toBeInstanceOf(Movie);
+      expect(result.id).toBe(tmdbResponse.movieOneDetails.data.id);
+      expect(result.title).toBe(tmdbResponse.movieOneDetails.data.title);
+    });
+
+    test('returns null if no movie with the given ID is found', async () => {
+      mockAxios.get.mockResolvedValueOnce(tmdbResponse.noMovieFound);
+
+      const invalidTMDbID = 1;
+      const result = await Movie.findByID(invalidTMDbID);
+
+      expect(result).toBeNull();
     });
   });
 });
