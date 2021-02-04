@@ -37,7 +37,8 @@ describe('Movie', () => {
     test('returns null if no results are found from the API', async () => {
       mockAxios.get.mockResolvedValueOnce(tmdbResponse.zeroTotalPages);
 
-      const result = await Movie.search('matrix');
+      const nonExistentMovie = 'abcdefghijklmnopqrstuvwxyz';
+      const result = await Movie.search(nonExistentMovie);
       
       expect(result).toBeNull();
     });
