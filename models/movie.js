@@ -39,7 +39,7 @@ class Movie {
     const apiKey = `?api_key=${process.env.TMDB_KEY}`;
     const lang = '&language=en-US';
 
-    const movieData = await axios.get({ url: `${baseURL}${movieID}${apiKey}${lang}` })
+    const movieData = await axios.get(`${baseURL}${movieID}${apiKey}${lang}`)
       .then(res => { return res.data; })
       .catch(err => console.log('MOVIE.FIND_BY_ID ERROR', err))
 
