@@ -1,3 +1,4 @@
 node_modules/
+coverage/*
 .env.development
 .env.test
