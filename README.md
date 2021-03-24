@@ -1,14 +1,13 @@
 # myMDb
 
-Currently in development, myMDb is a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. Movie data is sourced from The Movie Database (TMDb) API.
+myMDb is a site where a user can search for movies, rate a movie, review a movie, manage their watchlist and manage their favourites. Movie data is sourced from The Movie Database (TMDb) API.
 
 ## Technologies Used
 
 |                   | Technologies                         |                          
 |-------------------|--------------------------------------|
 | **Back End API** | Node, Express, JavaScript, PostgreSQL |
-| **Front End** | React |
-| **Testing** | Jest, Cypress |
+| **Testing** | Jest |
 
 ## Entity Relationship Diagram
 
